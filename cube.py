@@ -2,4 +2,5 @@ class Cube:
     def __init__():
         pass
     #hola
-    #gdhegd
+    def A(self):
+        pass
