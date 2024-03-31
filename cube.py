@@ -1,14 +1,17 @@
+import random
 class RubikCube:
     def __init__(self):
         self.colors_l = ["W", "R", "G", "Y", "O", "B"]
         self.colors = ["000", "001", "010", "011", "100", "101"]
         self.cubo = [[self.colors[i]]*8 for i in range(6)]
-        self.caras = [0, 0, 0, 0, 0, 0]
+        self.caras = [0, 0, 0]
     
     def calcular_caras(self):
-        for i in range(0, 6):
+        for i in range(0, 3):
             cadena = ""
             for j in self.cubo[i]:
+                cadena += j
+            for j in self.cubo[i+3]:
                 cadena += j
             self.caras[i] = int(cadena, 2)
     
@@ -94,6 +97,34 @@ class RubikCube:
     def B2(self):
         self.cambio(1, 5, 4, 2, 0, 5, 7, 2, 1, 3, 6, 4, 2, 0, 5, 7)
         self.cambio_cara(3, False)
+    
+    def shuffle_azar(self, N):
+        for _ in range(N):
+            mov = random.randint(0, 12)
+            if mov==0:
+                self.R1()
+            elif mov==1:
+                self.R2()
+            elif mov==2:
+                self.L1()
+            elif mov==3:
+                self.L2()
+            elif mov==4:
+                self.U1()
+            elif mov==5:
+                self.U2()
+            elif mov==6:
+                self.D1()
+            elif mov==7:
+                self.D2()
+            elif mov==8:
+                self.F1()
+            elif mov==9:
+                self.F2()
+            elif mov==10:
+                self.B1()
+            else:
+                self.B2()
 
     def print_faces(self):
         j=0
@@ -107,10 +138,7 @@ class RubikCube:
 
 
 a = RubikCube()
+a.shuffle_azar(2)
 a.calcular_caras()
-a.R1()
-a.U1()
-a.L1()
-a.B2()
-a.D1()
+print(a.caras)
 a.print_faces()
