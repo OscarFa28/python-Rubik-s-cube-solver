@@ -3,9 +3,9 @@ from .cube import Cube
 from .movements import Movements
 
 '''
-Rubik´s cube python proyect
+Rubik's cube python proyect
 Oscar Fabrizio de Alba
-Arturo Reza Quezada
+Jose Arturo Reza Quezada
 '''
 class Main:
     def __init__():

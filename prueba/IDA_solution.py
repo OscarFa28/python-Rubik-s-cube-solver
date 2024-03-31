@@ -183,7 +183,7 @@ estado_inicial = np.array([
 
 actual = Estado()
 actual.cubo = estado_inicial
-manejar = open('C:\\Users\\of_de\\OneDrive\\Documentos\\UP\\Estructura_de_d_y_a_III\\Proyecto_intermedio\\prueba\\input.txt')
+manejar = open('C:\\Users\\Lenovo ideapad\\Documents\\UP\\S4\\Estructuras3\\Rubik_proyect\\prueba\\input.txt')
 
 indices = [0, 1, 2, 3, 6, 9, 12, 4, 7, 10, 13, 5, 8, 11, 14, 15, 16, 17]
 indice = 0
