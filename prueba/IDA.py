@@ -1,7 +1,5 @@
-from Movements import make_movement
 import numpy as np
-from datetime import datetime
-import time
+from Movements import make_movement
 
 array = np.array([
     [[0, 0, 2], [1, 0, 2], [2, 0, 2]],
@@ -30,16 +28,14 @@ class Estado:
     h = 0 #Heurística que estima el costo restante desde el estado actual hasta el estado objetivo
     padre = None
     movimiento = None
-
+    
 # Función que verifica si se ha alcanzado el objetivo y escribe el estado final en output.txt
 def objetivo_alcanzado(actual):
     if actual.h != 0:
         return False
-    
-    cubo = actual.cubo
-    print_cube(cubo)
-    
 
+    cubo = actual.cubo
+    #print_cube(cubo)
     return True
 
 def print_cube(cubo):
@@ -114,7 +110,7 @@ def ida(start):
                 factores_de_rama.append(b)
 
         limite_costo = minimo
-
+        
 # Función para calcular la distancia de Manhattan
 def distancia_manhattan(cubo, i, z, esquina):
     c1 = array[i, z]
@@ -157,52 +153,3 @@ def suma_max_esquinas_borde(cubo):
             bordes = bordes + distancia_manhattan(cubo, i, 0, False) + distancia_manhattan(cubo, i, 2, False)
     return max(esquinas / 12, bordes / 8)
 
-##########################################
-
-# Estado inicial del cubo
-estado_inicial = np.array([
-    ['W', 'W', 'W'],
-    ['W', 'W', 'W'],
-    ['W', 'W', 'W'],
-    ['G', 'G', 'G'],
-    ['G', 'G', 'G'],
-    ['G', 'G', 'G'],
-    ['R', 'R', 'R'],
-    ['R', 'R', 'R'],
-    ['R', 'R', 'R'],
-    ['B', 'B', 'B'],
-    ['B', 'B', 'B'],
-    ['B', 'B', 'B'],
-    ['O', 'O', 'O'],
-    ['O', 'O', 'O'],
-    ['O', 'O', 'O'],
-    ['Y', 'Y', 'Y'],
-    ['Y', 'Y', 'Y'],
-    ['Y', 'Y', 'Y']
-])
-
-actual = Estado()
-actual.cubo = estado_inicial
-manejar = open('C:\\Users\\Lenovo ideapad\\Documents\\UP\\S4\\Estructuras3\\Rubik_proyect\\prueba\\input.txt')
-
-indices = [0, 1, 2, 3, 6, 9, 12, 4, 7, 10, 13, 5, 8, 11, 14, 15, 16, 17]
-indice = 0
-for linea in manejar:
-    linea = linea.replace(' ', '')
-    for fila in linea.split('['):
-        if len(fila) != 0:
-            i = indices[indice]
-            actual.cubo[i, 0] = fila[1]
-            actual.cubo[i, 1] = fila[4]
-            actual.cubo[i, 2] = fila[7]
-            indice += 1 
-
-time.ctime()
-fmt = '%H:%M:%S'
-inicio = time.strftime(fmt)
-
-ida(actual)
-
-time.ctime()
-fin = time.strftime(fmt)
-print("Tiempo transcurrido (segundos):", datetime.strptime(fin, fmt) - datetime.strptime(inicio, fmt))
