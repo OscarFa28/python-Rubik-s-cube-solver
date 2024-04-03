@@ -1,4 +1,5 @@
 import random
+
 class RubikCube:
     def __init__(self):
         self.colors_l = ["W", "R", "G", "Y", "O", "B"]
@@ -100,34 +101,38 @@ class RubikCube:
     
     def shuffle_azar(self, N):
         for _ in range(N):
-            mov = random.randint(0, 12)
-            if mov==0:
-                self.R1()
-            elif mov==1:
-                self.R2()
-            elif mov==2:
-                self.L1()
-            elif mov==3:
-                self.L2()
-            elif mov==4:
-                self.U1()
-            elif mov==5:
-                self.U2()
-            elif mov==6:
-                self.D1()
-            elif mov==7:
-                self.D2()
-            elif mov==8:
-                self.F1()
-            elif mov==9:
-                self.F2()
-            elif mov==10:
-                self.B1()
-            else:
-                self.B2()
+            x = random.randint(0, 12)
+            self.movs(x)
+        
+    def movs(self, mov):
+        if mov==0:
+            self.R1()
+        elif mov==1:
+            self.R2()
+        elif mov==2:
+            self.L1()
+        elif mov==3:
+            self.L2()
+        elif mov==4:
+            self.U1()
+        elif mov==5:
+            self.U2()
+        elif mov==6:
+            self.D1()
+        elif mov==7:
+            self.D2()
+        elif mov==8:
+            self.F1()
+        elif mov==9:
+            self.F2()
+        elif mov==10:
+            self.B1()
+        else:
+            self.B2()
+        self.calcular_caras()
 
     def print_faces(self):
-        j=0
+        j = 0
         for i in self.cubo:
             print("-CARA", j, end="")
             print("-")
@@ -136,9 +141,3 @@ class RubikCube:
             print(self.colors_l[int(i[5], 2)], self.colors_l[int(i[6], 2)], self.colors_l[int(i[7], 2)])
             j += 1
 
-
-a = RubikCube()
-a.shuffle_azar(2)
-a.calcular_caras()
-print(a.caras)
-a.print_faces()
