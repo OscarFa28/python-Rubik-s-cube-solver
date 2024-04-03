@@ -1,6 +1,6 @@
 import numpy as np
 from Movements import make_movement
-
+movimientos = []
 array = np.array([
     [[0, 0, 2], [1, 0, 2], [2, 0, 2]],
     [[0, 0, 1], [1, 0, 1], [2, 0, 1]],
@@ -28,6 +28,10 @@ class Estado:
     h = 0 #Heurística que estima el costo restante desde el estado actual hasta el estado objetivo
     padre = None
     movimiento = None
+
+def print_all_movements(actual):
+    for mov in movimientos:
+        print(mov)
     
 # Función que verifica si se ha alcanzado el objetivo y escribe el estado final en output.txt
 def objetivo_alcanzado(actual):
@@ -35,6 +39,7 @@ def objetivo_alcanzado(actual):
         return False
 
     cubo = actual.cubo
+    print_all_movements(actual)
     #print_cube(cubo)
     return True
 
@@ -89,13 +94,15 @@ def ida(start):
                 return
 
             b = 0
-            nodos = nodos + 12
+            nodos += 12
             for i in range(12):
                 nuevo = Estado()
                 nuevo.cubo = np.array(actual.cubo)
                 nuevo.g = actual.g + 1
                 nuevo.padre = actual
                 nuevo.movimiento = make_movement(nuevo.cubo, i + 1, 0)
+                #movimientos.append(make_movement(nuevo.cubo, i + 1, 0))
+                
                 nuevo.h = suma_max_esquinas_borde(nuevo.cubo)
 
                 if nuevo.g + nuevo.h > limite_costo:
@@ -105,7 +112,7 @@ def ida(start):
                 if actual.padre is not None and (contiene_ancestro(nuevo.cubo, actual) or contiene_frontera(nuevo.cubo, frontera)):
                     continue
                 frontera.append(nuevo)
-                b = b + 1
+                b += 1
             if b != 0:
                 factores_de_rama.append(b)
 
