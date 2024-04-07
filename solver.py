@@ -28,7 +28,7 @@ class RubikSolver:
                     visited.add(tuple(aux.caras))
 
 a = RubikCube()
-a.shuffle_azar(2)
+a.shuffle_azar(1)
 a.print_faces()
 b = RubikSolver(a)
 b.bfs()
@@ -40,3 +40,19 @@ print(b.distancia)
 #1 movs, 0.127s
 #18233 movs, 6.031s
 #NEW IS WAY TOO SLOW, TAKES ALMOST TWICE THE TIME
+
+"""
+TESTS ON THE USE OF LISTS AND OLD METHOD:
+23375m, 7.886s
+799m, 0.383s
+13m, 0.175s
+1m, 0.127s
+18233m, 6.031s
+
+NEW IS WAY (NUMPY) TOO SLOW, TAKES ALMOST TWICE THE TIME
+6014m, 4.646s
+2020m, 1.73s
+5686m, 4.413s
+81630m, 52.751s
+Why are they 220 movs if the range was one? Time: 0.548s
+"""

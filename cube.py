@@ -1,3 +1,4 @@
+"""
 import random
 import numpy as np
 
@@ -12,8 +13,7 @@ class RubikCube:
         for i in range(0, 3):
             cadena = "".join(self.cubo[i]) + "".join(self.cubo[i + 3])
             self.caras[i] = int(cadena, 2)
-
-    
+    #15m
     def cambio(self, cara1, cara2, cara3, cara4, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4):
         aux = self.cubo[cara1, a1]
         self.cubo[cara1, a1] = self.cubo[cara2, a2]
@@ -30,7 +30,7 @@ class RubikCube:
         self.cubo[cara2, c2] = self.cubo[cara3, c3]
         self.cubo[cara3, c3] = self.cubo[cara4, c4]
         self.cubo[cara4, c4] = aux
-    
+    #10m
     def cambio_cara(self, cara, horario):
         if(horario):
             aux = self.cubo[cara, 1]
@@ -138,3 +138,11 @@ class RubikCube:
             print(self.colors_l[int(i[3], 2)], self.colors_l[j], self.colors_l[int(i[4], 2)])
             print(self.colors_l[int(i[5], 2)], self.colors_l[int(i[6], 2)], self.colors_l[int(i[7], 2)])
             j += 1
+"""
+lista = [0]
+for i in range(100000000):
+    lista[0] = i
+#1e0m, 0.1s
+#1e6m, 0.2s
+#1e7m, 0.8s
+#1e8m, 8.0s
