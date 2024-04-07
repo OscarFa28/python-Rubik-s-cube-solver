@@ -1,61 +1,59 @@
 import random
+import numpy as np
 
 class RubikCube:
     def __init__(self):
         self.colors_l = ["W", "R", "G", "Y", "O", "B"]
-        self.colors = ["000", "001", "010", "011", "100", "101"]
-        self.cubo = [[self.colors[i]]*8 for i in range(6)]
+        self.colors = np.array(["000", "001", "010", "011", "100", "101"])
+        self.cubo = np.array([[self.colors[i]]*8 for i in range(6)])
         self.caras = [0, 0, 0]
     
     def calcular_caras(self):
         for i in range(0, 3):
-            cadena = ""
-            for j in self.cubo[i]:
-                cadena += j
-            for j in self.cubo[i+3]:
-                cadena += j
+            cadena = "".join(self.cubo[i]) + "".join(self.cubo[i + 3])
             self.caras[i] = int(cadena, 2)
+
     
     def cambio(self, cara1, cara2, cara3, cara4, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4):
-        aux = self.cubo[cara1][a1]
-        self.cubo[cara1][a1] = self.cubo[cara2][a2]
-        self.cubo[cara2][a2] = self.cubo[cara3][a3]
-        self.cubo[cara3][a3] = self.cubo[cara4][a4]
-        self.cubo[cara4][a4] = aux
-        aux = self.cubo[cara1][b1]
-        self.cubo[cara1][b1] = self.cubo[cara2][b2]
-        self.cubo[cara2][b2] = self.cubo[cara3][b3]
-        self.cubo[cara3][b3] = self.cubo[cara4][b4]
-        self.cubo[cara4][b4] = aux
-        aux = self.cubo[cara1][c1]
-        self.cubo[cara1][c1] = self.cubo[cara2][c2]
-        self.cubo[cara2][c2] = self.cubo[cara3][c3]
-        self.cubo[cara3][c3] = self.cubo[cara4][c4]
-        self.cubo[cara4][c4] = aux
+        aux = self.cubo[cara1, a1]
+        self.cubo[cara1, a1] = self.cubo[cara2, a2]
+        self.cubo[cara2, a2] = self.cubo[cara3, a3]
+        self.cubo[cara3, a3] = self.cubo[cara4, a4]
+        self.cubo[cara4, a4] = aux
+        aux = self.cubo[cara1, b1]
+        self.cubo[cara1, b1] = self.cubo[cara2, b2]
+        self.cubo[cara2, b2] = self.cubo[cara3, b3]
+        self.cubo[cara3, b3] = self.cubo[cara4, b4]
+        self.cubo[cara4, b4] = aux
+        aux = self.cubo[cara1, c1]
+        self.cubo[cara1, c1] = self.cubo[cara2, c2]
+        self.cubo[cara2, c2] = self.cubo[cara3, c3]
+        self.cubo[cara3, c3] = self.cubo[cara4, c4]
+        self.cubo[cara4, c4] = aux
     
     def cambio_cara(self, cara, horario):
         if(horario):
-            aux = self.cubo[cara][1]
-            self.cubo[cara][1] = self.cubo[cara][3]
-            self.cubo[cara][3] = self.cubo[cara][6]
-            self.cubo[cara][6] = self.cubo[cara][4]
-            self.cubo[cara][4] = aux
-            aux = self.cubo[cara][0]
-            self.cubo[cara][0] = self.cubo[cara][5]
-            self.cubo[cara][5] = self.cubo[cara][7]
-            self.cubo[cara][7] = self.cubo[cara][2]
-            self.cubo[cara][2] = aux
+            aux = self.cubo[cara, 1]
+            self.cubo[cara, 1] = self.cubo[cara, 3]
+            self.cubo[cara, 3] = self.cubo[cara, 6]
+            self.cubo[cara, 6] = self.cubo[cara, 4]
+            self.cubo[cara, 4] = aux
+            aux = self.cubo[cara, 0]
+            self.cubo[cara, 0] = self.cubo[cara, 5]
+            self.cubo[cara, 5] = self.cubo[cara, 7]
+            self.cubo[cara, 7] = self.cubo[cara, 2]
+            self.cubo[cara, 2] = aux
         else:
-            aux = self.cubo[cara][1]
-            self.cubo[cara][1] = self.cubo[cara][4]
-            self.cubo[cara][4] = self.cubo[cara][6]
-            self.cubo[cara][6] = self.cubo[cara][3]
-            self.cubo[cara][3] = aux
-            aux = self.cubo[cara][0]
-            self.cubo[cara][0] = self.cubo[cara][2]
-            self.cubo[cara][2] = self.cubo[cara][7]
-            self.cubo[cara][7] = self.cubo[cara][5]
-            self.cubo[cara][5] = aux
+            aux = self.cubo[cara, 1]
+            self.cubo[cara, 1] = self.cubo[cara, 4]
+            self.cubo[cara, 4] = self.cubo[cara, 6]
+            self.cubo[cara, 6] = self.cubo[cara, 3]
+            self.cubo[cara, 3] = aux
+            aux = self.cubo[cara, 0]
+            self.cubo[cara, 0] = self.cubo[cara, 2]
+            self.cubo[cara, 2] = self.cubo[cara, 7]
+            self.cubo[cara, 7] = self.cubo[cara, 5]
+            self.cubo[cara, 5] = aux
 
     def R1(self):
         self.cambio(0, 4, 3, 1, 4, 4, 3, 4, 2, 2, 5, 2, 7, 7, 0, 7)
@@ -140,4 +138,3 @@ class RubikCube:
             print(self.colors_l[int(i[3], 2)], self.colors_l[j], self.colors_l[int(i[4], 2)])
             print(self.colors_l[int(i[5], 2)], self.colors_l[int(i[6], 2)], self.colors_l[int(i[7], 2)])
             j += 1
-

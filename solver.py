@@ -28,8 +28,15 @@ class RubikSolver:
                     visited.add(tuple(aux.caras))
 
 a = RubikCube()
-a.shuffle_azar(3)
+a.shuffle_azar(2)
 a.print_faces()
 b = RubikSolver(a)
 b.bfs()
 print(b.distancia)
+
+#23375 movs, 7.886s
+#799 movs, 0.383s
+#13 movs, 0.175s
+#1 movs, 0.127s
+#18233 movs, 6.031s
+#NEW IS WAY TOO SLOW, TAKES ALMOST TWICE THE TIME
