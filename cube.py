@@ -1,29 +1,41 @@
 import random
-import numpy as np
 
 class RubikCube:
     def __init__(self):
         self.colors_l = ["W", "R", "G", "Y", "O", "B"]
         self.colors = ["000", "001", "010", "011", "100", "101"]
         self.cubo = [[self.colors[i]]*8 for i in range(6)]
-        self.caras = [0, 0, 0]
+        self.caras = [0, 2396745, 4793490, 7190235, 9586980, 11983725]
+        self.caras_aux = [0, 2396745, 4793490, 7190235, 9586980, 11983725]
     
     def calcular_caras(self):
-        for i in range(0, 3):
-            cadena = "".join(self.cubo[i]) + "".join(self.cubo[i + 3])
+        for i in range(0, 6):
+            cadena = "".join(self.cubo[i])
             self.caras[i] = int(cadena, 2)
     
     def cambio(self, cara1, cara2, cara3, cara4, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4):
+        d1 = (int(self.cubo[cara1][a1], 2)*(8**(7-a1))) + (int(self.cubo[cara1][b1], 2)*(8**(7-b1))) + (int(self.cubo[cara1][c1], 2)*(8**(7-c1)))
+        d2 = (int(self.cubo[cara2][a2], 2)*(8**(7-a2))) + (int(self.cubo[cara2][b2], 2)*(8**(7-b2))) + (int(self.cubo[cara3][c2], 2)*(8**(7-c2)))
+        d3 = (int(self.cubo[cara3][a3], 2)*(8**(7-a3))) + (int(self.cubo[cara3][b3], 2)*(8**(7-b3))) + (int(self.cubo[cara3][c3], 2)*(8**(7-c3)))
+        d4 = (int(self.cubo[cara4][a4], 2)*(8**(7-a4))) + (int(self.cubo[cara4][b4], 2)*(8**(7-b4))) + (int(self.cubo[cara4][c4], 2)*(8**(7-c4)))
+        self.caras_aux[cara1] += (d2-d1)
+        self.caras_aux[cara2] += (d3-d2)
+        self.caras_aux[cara3] += (d4-d3)
+        self.caras_aux[cara4] += (d1-d4)
+        print(d1, d2, d3, d4)
+
         aux = self.cubo[cara1][a1]
         self.cubo[cara1][a1] = self.cubo[cara2][a2]
         self.cubo[cara2][a2] = self.cubo[cara3][a3]
         self.cubo[cara3][a3] = self.cubo[cara4][a4]
         self.cubo[cara4][a4] = aux
+
         aux = self.cubo[cara1][b1]
         self.cubo[cara1][b1] = self.cubo[cara2][b2]
         self.cubo[cara2][b2] = self.cubo[cara3][b3]
         self.cubo[cara3][b3] = self.cubo[cara4][b4]
         self.cubo[cara4][b4] = aux
+
         aux = self.cubo[cara1][c1]
         self.cubo[cara1][c1] = self.cubo[cara2][c2]
         self.cubo[cara2][c2] = self.cubo[cara3][c3]
@@ -129,15 +141,42 @@ class RubikCube:
         self.calcular_caras()
 
     def print_faces(self):
-        j = 0
-        for i in self.cubo:
-            print("-CARA", j, end="")
-            print("-")
-            print(self.colors_l[int(i[0], 2)], self.colors_l[int(i[1], 2)], self.colors_l[int(i[2], 2)])
-            print(self.colors_l[int(i[3], 2)], self.colors_l[j], self.colors_l[int(i[4], 2)])
-            print(self.colors_l[int(i[5], 2)], self.colors_l[int(i[6], 2)], self.colors_l[int(i[7], 2)])
-            j += 1
+        for j in range(2):
+            i = j*3
+            print("CARA", i+1, "\tCARA", i+2, "\tCARA", i+3)
+            print(self.colors_l[int(self.cubo[i][0], 2)], self.colors_l[int(self.cubo[i][1], 2)], self.colors_l[int(self.cubo[i][2], 2)], end="\t")
+            print(self.colors_l[int(self.cubo[i+1][0], 2)], self.colors_l[int(self.cubo[i+1][1], 2)], self.colors_l[int(self.cubo[i+1][2], 2)], end="\t")
+            print(self.colors_l[int(self.cubo[i+2][0], 2)], self.colors_l[int(self.cubo[i+2][1], 2)], self.colors_l[int(self.cubo[i+2][2], 2)])
+
+            print(self.colors_l[int(self.cubo[i][3], 2)], self.colors_l[i], self.colors_l[int(self.cubo[i][4], 2)], end="\t")
+            print(self.colors_l[int(self.cubo[i+1][3], 2)], self.colors_l[i+1], self.colors_l[int(self.cubo[i+1][4], 2)], end="\t")
+            print(self.colors_l[int(self.cubo[i+2][3], 2)], self.colors_l[i+2], self.colors_l[int(self.cubo[i+2][4], 2)])
+
+            print(self.colors_l[int(self.cubo[i][5], 2)], self.colors_l[int(self.cubo[i][6], 2)], self.colors_l[int(self.cubo[i][7], 2)], end="\t")
+            print(self.colors_l[int(self.cubo[i+1][5], 2)], self.colors_l[int(self.cubo[i+1][6], 2)], self.colors_l[int(self.cubo[i+1][7], 2)], end="\t")
+            print(self.colors_l[int(self.cubo[i+2][5], 2)], self.colors_l[int(self.cubo[i+2][6], 2)], self.colors_l[int(self.cubo[i+2][7], 2)])
+
+a = RubikCube()
+a.R1()
+print(a.caras_aux)
+a.R2()
+a.cubo[0][2] = "011"
+a.cubo[0][4] = "011"
+a.cubo[0][7] = "011"
+a.print_faces()
+a.calcular_caras()
+print(a.caras)
+#d1 pertenece a la suma de la cara 0
+#d2 pertenece a la suma de la cara 4
+#d4 pertenece a la suma de la cara 1
+#ninguno pertenece a la suma de la cara 3
+
 
 """
-A 40 movs el cambio y conteo VS 70 cambio y conteo
+lista = np.array([1, 2, 3])
+for i in range(10000000):
+    lista[1] = i
+print(lista)
+Lista, 1e6-0.17, 1e7-0.9, 1e8-7
+Numpy, 1e6-.6, 1e7-2, 1e8-14
 """

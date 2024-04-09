@@ -5,20 +5,20 @@ import copy
 class RubikSolver:
     def __init__(self, cubo):
         self.cubo = cubo
-        self.solved = (7190235, 40210718148900, 80421429107565)
+        self.solved = (0, 2396745, 4793490, 7190235, 9586980, 11983725)
         self.distancia = 0
         self.mov_resuelto = []
 
     def bfs(self):
+        if(tuple(self.cubo.caras) == self.solved):
+            print("Already solved.")
+            return
         cola = Queue()
         cola.put(self.cubo)
         self.cubo.calcular_caras()
         visited = set()
         visited.add(tuple(self.cubo.caras))
         visited.add(self.solved)
-        if(tuple(self.cubo.caras) == self.solved):
-            print("Already solved.")
-            cola.queue.clear()
         while cola.empty() is not True:
             self.distancia += 1
             aux = cola.get()
