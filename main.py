@@ -1,5 +1,5 @@
-from .solve import Solve
-from .cube import Cube
+from .solver import RubikSolver, Nodo
+from .cube import RubikCube
 from .movements import Movements
 
 '''

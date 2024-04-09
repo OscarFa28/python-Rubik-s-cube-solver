@@ -1,6 +1,20 @@
 from queue import Queue
+from queue import PriorityQueue
 from cube import RubikCube
 import copy
+
+class Heuristics:
+    @staticmethod
+    def heu1(a):
+        return a
+    
+    @staticmethod
+    def heu2(a):
+        return a*2
+    
+    @staticmethod
+    def heu3(a):
+        return a*3
 
 class Nodo:
     def __init__(self, cubo):
@@ -8,7 +22,11 @@ class Nodo:
         self.distancia = 0
         self.movimientos = []
         self.movs_letras = ["R1", "R2", "L1", "L2", "U1", "U2", "D1", "D2", "F1", "F2", "B1", "B2"]
+        self.heuristic_val = -1
     
+    def calculate_heuristic(self, other, heuristic):
+        self.heuristic_value = heuristic(self, other)
+
     def imp_mov(self):
         for i in self.movimientos:
             print(self.movs_letras[i], end=" ")
@@ -32,9 +50,9 @@ class RubikSolver:
         if(tuple(self.cubo.caras) == self.solved):
             print("Already solved.")
             return
-        nodo_inicial = Nodo(self.cubo)
+        source = Nodo(self.cubo)
         cola = Queue()
-        cola.put(nodo_inicial)
+        cola.put(source)
         visited = set()
         visited.add(tuple(self.cubo.caras))
         visited.add(self.solved)
@@ -57,11 +75,38 @@ class RubikSolver:
                     return
         print("Not possible")
 
-    def a_star():
+    def best_first_search(self, heuristic):
+        pq = PriorityQueue()
+        source = Nodo(self.cubo)
+        target = Nodo(RubikCube())
+        pq.put(source)
+
+        visited = set()
+        visited.add(tuple(self.cubo.caras))
+
+        while not pq.empty():
+            current = pq.get()
+            if current == target:
+                print("---SOLVED---")
+                print("Movimientos para resolver: ", current.distancia)
+                current.imp_mov()
+                return
+            for i in range(12):
+                curr2 = copy.deepcopy(current)
+                curr2.cubo.movs(i)
+                lista = tuple(curr2.cubo.caras)
+                if lista not in visited:
+                    curr2.distancia += 1
+                    curr2.movimientos.append(i)
+                    curr2.calculate_heuristic(target, heuristic)
+                    visited.add(lista)
+                    pq.put(curr2)
+
+    def a_star(self):
         pass
 
 solucionador = RubikSolver()
-solucionador.revolver(True, 6)
+solucionador.revolver(True, 4)
 solucionador.bfs()
 
 """
