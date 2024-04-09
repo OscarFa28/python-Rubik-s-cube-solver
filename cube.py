@@ -3,16 +3,16 @@ import random
 class RubikCube:
     def __init__(self):
         self.colors_l = ["W", "R", "G", "Y", "O", "B"]
-        self.colors = ["000", "001", "010", "011", "100", "101"]
-        self.cubo = [[self.colors[i]]*8 for i in range(6)]
+        self.cubo = [[i]*8 for i in range(6)]
         self.caras = [0, 2396745, 4793490, 7190235, 9586980, 11983725]
     
     def calcular_caras(self, f1):
         for i in range(0, 6):
             if i == f1 or i == f1+3: 
                 continue
-            cadena = "".join(self.cubo[i])
-            self.caras[i] = int(cadena, 2)
+            nuevo = self.cubo[i][0]*(8**7) + self.cubo[i][1]*(8**6) + self.cubo[i][2]*(8**5) + self.cubo[i][3]*(8**4)
+            nuevo += self.cubo[i][4]*(8**3) + self.cubo[i][5]*(8**2) + self.cubo[i][6]*(8) + self.cubo[i][7]
+            self.caras[i] = nuevo
     
     def cambio(self, cara1, cara2, cara3, cara4, a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4):
         aux = self.cubo[cara1][a1]
@@ -103,6 +103,10 @@ class RubikCube:
         for _ in range(N):
             x = random.randint(0, 11)
             self.movs(x)
+
+    def shuffle(self, movimientos):
+        for i in movimientos:
+            self.movs(i)
         
     def movs(self, mov):
         if mov==0:
@@ -146,23 +150,18 @@ class RubikCube:
         for j in range(2):
             i = j*3
             print("CARA", i+1, "\tCARA", i+2, "\tCARA", i+3)
-            print(self.colors_l[int(self.cubo[i][0], 2)], self.colors_l[int(self.cubo[i][1], 2)], self.colors_l[int(self.cubo[i][2], 2)], end="\t\t")
-            print(self.colors_l[int(self.cubo[i+1][0], 2)], self.colors_l[int(self.cubo[i+1][1], 2)], self.colors_l[int(self.cubo[i+1][2], 2)], end="\t\t")
-            print(self.colors_l[int(self.cubo[i+2][0], 2)], self.colors_l[int(self.cubo[i+2][1], 2)], self.colors_l[int(self.cubo[i+2][2], 2)])
+            print(self.colors_l[self.cubo[i][0]], self.colors_l[self.cubo[i][1]], self.colors_l[self.cubo[i][2]], end="\t\t")
+            print(self.colors_l[self.cubo[i+1][0]], self.colors_l[self.cubo[i+1][1]], self.colors_l[self.cubo[i+1][2]], end="\t\t")
+            print(self.colors_l[self.cubo[i+2][0]], self.colors_l[self.cubo[i+2][1]], self.colors_l[self.cubo[i+2][2]])
 
-            print(self.colors_l[int(self.cubo[i][3], 2)], self.colors_l[i], self.colors_l[int(self.cubo[i][4], 2)], end="\t\t")
-            print(self.colors_l[int(self.cubo[i+1][3], 2)], self.colors_l[i+1], self.colors_l[int(self.cubo[i+1][4], 2)], end="\t\t")
-            print(self.colors_l[int(self.cubo[i+2][3], 2)], self.colors_l[i+2], self.colors_l[int(self.cubo[i+2][4], 2)])
+            print(self.colors_l[self.cubo[i][3]], self.colors_l[i], self.colors_l[self.cubo[i][4]], end="\t\t")
+            print(self.colors_l[self.cubo[i+1][3]], self.colors_l[i+1], self.colors_l[self.cubo[i+1][4]], end="\t\t")
+            print(self.colors_l[self.cubo[i+2][3]], self.colors_l[i+2], self.colors_l[self.cubo[i+2][4]])
 
-            print(self.colors_l[int(self.cubo[i][5], 2)], self.colors_l[int(self.cubo[i][6], 2)], self.colors_l[int(self.cubo[i][7], 2)], end="\t\t")
-            print(self.colors_l[int(self.cubo[i+1][5], 2)], self.colors_l[int(self.cubo[i+1][6], 2)], self.colors_l[int(self.cubo[i+1][7], 2)], end="\t\t")
-            print(self.colors_l[int(self.cubo[i+2][5], 2)], self.colors_l[int(self.cubo[i+2][6], 2)], self.colors_l[int(self.cubo[i+2][7], 2)])
-
-#d1 pertenece a la suma de la cara 0
-#d2 pertenece a la suma de la cara 4
-#d4 pertenece a la suma de la cara 1
-#ninguno pertenece a la suma de la cara 3, debe ser 99843
-
+            print(self.colors_l[self.cubo[i][5]], self.colors_l[self.cubo[i][6]], self.colors_l[self.cubo[i][7]], end="\t\t")
+            print(self.colors_l[self.cubo[i+1][5]], self.colors_l[self.cubo[i+1][6]], self.colors_l[self.cubo[i+1][7]], end="\t\t")
+            print(self.colors_l[self.cubo[i+2][5]], self.colors_l[self.cubo[i+2][6]], self.colors_l[self.cubo[i+2][7]])
+9
 """
 lista = np.array([1, 2, 3])
 for i in range(10000000):
