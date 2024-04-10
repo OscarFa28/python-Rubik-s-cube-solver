@@ -5,8 +5,8 @@ import copy
 
 class Heuristics:
     @staticmethod
-    #Manhattan distance between edges and their right place
-    def heuristic_1(node):
+    #Manhattan distance between edges and their correspondent place
+    def heu_1(node):
         val = 0
         for i in range(6):
             for j in [1, 3, 4, 6]:
@@ -17,8 +17,14 @@ class Heuristics:
         return val
     
     @staticmethod
-    def heu2(a):
-        return a*2
+    #Otra heuristica chafa, que haga el conteo de caras correctas
+    def heu_2(node):
+        val = 0
+        for i in range(6):
+            for j in range(8):
+                if node.Rubik.cubo[i][j] != i:
+                    val += 1
+        return val
     
     @staticmethod
     def heu3(a):
@@ -128,9 +134,9 @@ class RubikSolver:
         pass
 
 solucionador = RubikSolver()
-solucionador.revolver(True, 4)
+solucionador.revolver(True, 3)
 #solucionador.bfs()
-solucionador.best_first_search(Heuristics.heuristic_1)
+solucionador.best_first_search(Heuristics.heu_2)
 
 """
 PRUEBA CORTA DE HEURISTICA 1
@@ -140,7 +146,7 @@ a.movs(0)
 a.movs(0)
 a.movs(0)
 prueba = Nodo(a)
-prueba.calculate_heuristic(Heuristics.heuristic_1)
+prueba.calculate_heuristic(Heuristics.heu_1)
 print(prueba.heuristic_value)
 """
 
