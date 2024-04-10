@@ -46,6 +46,7 @@ class Nodo:
         self.movimientos = []
         self.movs_letras = ["R1", "R2", "L1", "L2", "U1", "U2", "D1", "D2", "F1", "F2", "B1", "B2"]
         self.heuristic_value = 0
+        self.total_heuristic = 0
     
     def calculate_heuristic(self, heuristic):
         self.heuristic_value = heuristic(self)
@@ -58,7 +59,7 @@ class Nodo:
     def __lt__(self, other):
         if not isinstance(other, Nodo):
             return False
-        return self.heuristic_value < other.heuristic_value
+        return self.heuristic_value+self.total_heuristic < other.heuristic_value+other.total_heuristic
 
     def imp_mov(self):
         for i in self.movimientos:
@@ -141,13 +142,46 @@ class RubikSolver:
                     curr2.imp_mov()
                     return
 
-    def a_star(self):
-        pass
+    def a_star(self, heuristic):
+        if(tuple(self.Rubik.caras) == self.solved):
+            print("Already solved.")
+            return
+        
+        pq = PriorityQueue()
+        source = Nodo(self.Rubik)
+        pq.put(source)
+
+        visited = set()
+        visited.add(tuple(self.Rubik.caras))
+        visited.add(self.solved)
+
+        while not pq.empty():
+            current = pq.get()
+            for i in range(12):
+                curr2 = copy.deepcopy(current)
+                curr2.Rubik.movs(i)
+                lista = tuple(curr2.Rubik.caras)
+                if lista not in visited:
+                    curr2.distancia += 1
+                    curr2.movimientos.append(i)
+                    curr2.calculate_heuristic(heuristic)
+                    curr2.total_heuristic += curr2.heuristic_value
+                    visited.add(lista)
+                    pq.put(curr2)
+                elif lista == self.solved:
+                    curr2.distancia += 1
+                    curr2.movimientos.append(i)
+                    print("---SOLVED---")
+                    print("Movimientos para resolver: ", curr2.distancia)
+                    curr2.imp_mov()
+                    return
 
 solucionador = RubikSolver()
-solucionador.revolver(True, 6)
+solucionador.revolver(True, 5)
 #solucionador.bfs()
-#solucionador.best_first_search(Heuristics.heu_3)
+solucionador.best_first_search(Heuristics.heu_1)
+#solucionador.a_star(Heuristics.heu_2)
+
 """
 PRUEBA CORTA DE HEURISTICA 1
 NOTA: LA HEURISTICA 1 DE ARISTAS A SU LUGAR CORRESPONDIENTE NO FUNCIONA OPTIMAMENTE
