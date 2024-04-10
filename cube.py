@@ -161,7 +161,7 @@ class RubikCube:
             print(self.colors_l[self.cubo[i][5]], self.colors_l[self.cubo[i][6]], self.colors_l[self.cubo[i][7]], end="\t\t")
             print(self.colors_l[self.cubo[i+1][5]], self.colors_l[self.cubo[i+1][6]], self.colors_l[self.cubo[i+1][7]], end="\t\t")
             print(self.colors_l[self.cubo[i+2][5]], self.colors_l[self.cubo[i+2][6]], self.colors_l[self.cubo[i+2][7]])
-9
+
 """
 lista = np.array([1, 2, 3])
 for i in range(10000000):
