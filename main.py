@@ -11,9 +11,6 @@ class Main:
     def __init__(self):
         self.solver = RubikSolver()
     
-    def print_movements(self):
-        pass
-    
     def menu(self):
         Texts.i()
         while True:
