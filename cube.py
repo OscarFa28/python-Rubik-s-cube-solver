@@ -149,7 +149,9 @@ class RubikCube:
     def print_faces(self):
         for j in range(2):
             i = j*3
-            print("CARA", i+1, "\tCARA", i+2, "\tCARA", i+3)
+            print("---------------------------------------------")
+            print("CARA", i+1, "\t\tCARA", i+2, "\t\tCARA", i+3)
+            print("---------------------------------------------")
             print(self.colors_l[self.cubo[i][0]], self.colors_l[self.cubo[i][1]], self.colors_l[self.cubo[i][2]], end="\t\t")
             print(self.colors_l[self.cubo[i+1][0]], self.colors_l[self.cubo[i+1][1]], self.colors_l[self.cubo[i+1][2]], end="\t\t")
             print(self.colors_l[self.cubo[i+2][0]], self.colors_l[self.cubo[i+2][1]], self.colors_l[self.cubo[i+2][2]])

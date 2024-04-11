@@ -33,6 +33,13 @@ class Heuristics:
             if node.Rubik.cubo[i][l[7]] != node.Rubik.cubo[i][l[0]]:
                 val += 1
         return val
+    
+    @staticmethod
+    def heu_4(node):
+        val1 = Heuristics.heu_1(node)
+        val2 = Heuristics.heu_2(node)
+        val3 = Heuristics.heu_3(node)
+        return (val1 + val2 + val3) / 3
 
 class Nodo:
     def __init__(self, Rubik):
@@ -45,6 +52,9 @@ class Nodo:
     
     def calculate_heuristic(self, heuristic):
         self.heuristic_value = heuristic(self)
+        
+    def return_heuristic_value(self, heuristic):
+        return heuristic(self)
 
     def __eq__(self, other):
         if not isinstance(other, Nodo):
@@ -71,6 +81,10 @@ class RubikSolver:
             self.Rubik.shuffle_azar(movs)
         else:
             self.Rubik.shuffle(movs)
+        self.Rubik.print_faces()
+    
+    def make_move(self, move):
+        self.Rubik.movs(move)
         self.Rubik.print_faces()
 
     def bfs(self):
@@ -167,12 +181,62 @@ class RubikSolver:
                     print("Movimientos para resolver: ", curr2.distancia)
                     curr2.imp_mov()
                     return
+    
+    def ida_star(self, heuristic):
+        if(tuple(self.Rubik.caras) == self.solved):
+            print("Already solved.")
+            return
+        
+        source = Nodo(self.Rubik)
+        threshold = source.return_heuristic_value(heuristic)
+        while True:
+            print(threshold)
+            temp = self.__search(source, 0, threshold, heuristic)
+            if temp == "FOUND":
+                return
+            if temp == float('inf'):
+                return "Not possible"
+            threshold = temp
+            
 
+<<<<<<< HEAD
 solucionador = RubikSolver()
 solucionador.revolver(True, 6)
 #solucionador.bfs()
 #solucionador.best_first_search(Heuristics.heu_3)
 #solucionador.a_star(Heuristics.heu_3)
+=======
+    def __search(self, node, g, threshold, heuristic):
+        f = g + node.return_heuristic_value(heuristic)
+        if f > threshold:
+            return f
+        if node == self.solved:
+            return "FOUND"
+        min = float('inf')
+        for i in range(12):
+            node2 = copy.deepcopy(node)
+            node2.Rubik.movs(i)
+            temp = self.__search(node2, g + 1, threshold, heuristic)
+            if temp == "FOUND":
+                return "FOUND"
+            if temp < min:
+                min = temp
+        return min
+
+
+    
+                
+                
+    
+    
+
+#solucionador = RubikSolver()
+#solucionador.revolver(True, 8)
+#solucionador.bfs()
+#solucionador.best_first_search(Heuristics.heu_4)
+#solucionador.a_star(Heuristics.heu_1)
+#solucionador.ida_star(Heuristics.heu_4)
+>>>>>>> 774d4a4feb981fe937d8dd246faddb5ad2a21a64
 
 """
 PRUEBA CORTA DE HEURISTICA 1

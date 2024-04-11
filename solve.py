@@ -56,6 +56,9 @@ def a_star(initial_state):
             new_state = move(state)
             new_cost = cost + 1
             heapq.heappush(queue, (heuristic(new_state) + new_cost, new_cost, new_state))
+            
+#Define the IDA algorithm
+
 
 # Example usage
 # Solve using Best-First Search
