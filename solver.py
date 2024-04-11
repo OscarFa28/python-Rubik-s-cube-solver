@@ -53,6 +53,14 @@ class Heuristics:
                 val += 1
         return val
     
+    @staticmethod
+    #heuristica creativa, puede que poco efectiva, que solo saca el promedio de las 3 heuristicas pasadas
+    def heu_4(node):
+        val1 = Heuristics.heu_1(node)
+        val2 = Heuristics.heu_2(node)
+        val3 = Heuristics.heu_3(node)
+        return (val1 + val2 + val3) / 3
+    
 #Clase de nodo para ir guardando estados del cubo, asi como todo lo relacionado a la heuristica de ese cubo
 class Nodo:
     #En el inicializador, le pasamos un elemento de la clase RubikCube
@@ -274,7 +282,7 @@ solucionador.revolver(True, 2)
 #solucionador.bfs()
 #solucionador.best_first_search(Heuristics.heu_2)
 #solucionador.a_star(Heuristics.heu_3)
-solucionador.ida_star(Heuristics.heu_1)
+#solucionador.ida_star(Heuristics.heu_1)
 
 """
 LIST OF MOVES:
