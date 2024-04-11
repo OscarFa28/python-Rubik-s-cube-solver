@@ -163,13 +163,3 @@ class RubikCube:
             print(self.colors_l[self.cubo[i][5]], self.colors_l[self.cubo[i][6]], self.colors_l[self.cubo[i][7]], end="\t\t")
             print(self.colors_l[self.cubo[i+1][5]], self.colors_l[self.cubo[i+1][6]], self.colors_l[self.cubo[i+1][7]], end="\t\t")
             print(self.colors_l[self.cubo[i+2][5]], self.colors_l[self.cubo[i+2][6]], self.colors_l[self.cubo[i+2][7]])
-
-
-"""
-lista = np.array([1, 2, 3])
-for i in range(10000000):
-    lista[1] = i
-print(lista)
-Lista, 1e6-0.17, 1e7-0.9, 1e8-7
-Numpy, 1e6-.6, 1e7-2, 1e8-14
-"""

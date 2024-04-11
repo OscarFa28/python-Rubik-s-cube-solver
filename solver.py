@@ -199,13 +199,6 @@ class RubikSolver:
             threshold = temp
             
 
-<<<<<<< HEAD
-solucionador = RubikSolver()
-solucionador.revolver(True, 6)
-#solucionador.bfs()
-#solucionador.best_first_search(Heuristics.heu_3)
-#solucionador.a_star(Heuristics.heu_3)
-=======
     def __search(self, node, g, threshold, heuristic):
         f = g + node.return_heuristic_value(heuristic)
         if f > threshold:
@@ -236,7 +229,6 @@ solucionador.revolver(True, 6)
 #solucionador.best_first_search(Heuristics.heu_4)
 #solucionador.a_star(Heuristics.heu_1)
 #solucionador.ida_star(Heuristics.heu_4)
->>>>>>> 774d4a4feb981fe937d8dd246faddb5ad2a21a64
 
 """
 PRUEBA CORTA DE HEURISTICA 1
