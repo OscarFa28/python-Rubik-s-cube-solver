@@ -243,38 +243,42 @@ class RubikSolver:
                     return
     
     def ida_star(self, heuristic):
-        if(tuple(self.Rubik.caras) == self.solved):
+        # Método IDA* para resolver el cubo de Rubik
+        # Comprueba si el cubo ya está resuelto
+        if tuple(self.Rubik.caras) == self.solved:
             print("Already solved.")
             return
         
-        source = Nodo(self.Rubik)
-        threshold = source.return_heuristic_value(heuristic)
+        source = Nodo(self.Rubik)  # Nodo de origen con el estado actual del cubo
+        threshold = source.return_heuristic_value(heuristic)  # Umbral inicial
         while True:
-            print(threshold)
+            print(threshold)  # Imprime el umbral actual (para propósitos de depuración)
+            # Realiza una búsqueda con IDA* hasta que encuentre una solución o alcance un umbral máximo
             temp = self.__search(source, 0, threshold, heuristic)
-            if temp == "FOUND":
+            if temp == "FOUND":  # Si se encuentra una solución, termina el algoritmo
                 return
-            if temp == float('inf'):
+            if temp == float('inf'):  # Si no es posible resolver el cubo, devuelve un mensaje de error
                 return "Not possible"
-            threshold = temp
-            
+            threshold = temp  # Actualiza el umbral para la siguiente iteración
 
     def __search(self, node, g, threshold, heuristic):
-        f = g + node.return_heuristic_value(heuristic)
-        if f > threshold:
+        # Método privado para realizar la búsqueda recursiva con IDA*
+        f = g + node.return_heuristic_value(heuristic)  # Costo total actual (g + heurística)
+        if f > threshold:  # Si el costo total supera el umbral, termina la búsqueda en este nodo
             return f
-        if node == self.solved:
+        if node == self.solved:  # Si se alcanza el estado objetivo, se encontró una solución
             return "FOUND"
-        min = float('inf')
-        for i in range(12):
-            node2 = copy.deepcopy(node)
-            node2.Rubik.movs(i)
+        min = float('inf')  # Inicializa el mínimo con infinito
+        for i in range(12):  # Itera sobre los posibles movimientos del cubo (12 en total)
+            node2 = copy.deepcopy(node)  # Crea una copia del nodo actual para simular el movimiento
+            node2.Rubik.movs(i)  # Aplica el movimiento al cubo
+            # Realiza una búsqueda recursiva con IDA* desde el nuevo nodo generado
             temp = self.__search(node2, g + 1, threshold, heuristic)
-            if temp == "FOUND":
+            if temp == "FOUND":  # Si se encuentra una solución, termina la búsqueda
                 return "FOUND"
-            if temp < min:
+            if temp < min:  # Actualiza el mínimo si se encuentra un nuevo valor menor
                 min = temp
-        return min
+        return min  # Retorna el mínimo encontrado después de explorar todos los movimientos
 
 
 solucionador = RubikSolver()
