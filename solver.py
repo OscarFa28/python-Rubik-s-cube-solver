@@ -260,7 +260,7 @@ class RubikSolver:
             if temp == float('inf'):  # Si no es posible resolver el cubo, devuelve un mensaje de error
                 return "Not possible"
             threshold = temp  # Actualiza el umbral para la siguiente iteración
-
+        
     def __search(self, node, g, threshold, heuristic):
         # Método privado para realizar la búsqueda recursiva con IDA*
         f = g + node.return_heuristic_value(heuristic)  # Costo total actual (g + heurística)
@@ -268,7 +268,7 @@ class RubikSolver:
             return f
         if node == self.solved:  # Si se alcanza el estado objetivo, se encontró una solución
             return "FOUND"
-        min = float('inf')  # Inicializa el mínimo con infinito
+        min = g + node.return_heuristic_value(heuristic)  # Inicializa el mínimo con el costo actual
         for i in range(12):  # Itera sobre los posibles movimientos del cubo (12 en total)
             node2 = copy.deepcopy(node)  # Crea una copia del nodo actual para simular el movimiento
             node2.Rubik.movs(i)  # Aplica el movimiento al cubo
@@ -282,7 +282,7 @@ class RubikSolver:
 
 
 solucionador = RubikSolver()
-solucionador.revolver(True, 2)
+#solucionador.revolver(True, 2)
 #solucionador.bfs()
 #solucionador.best_first_search(Heuristics.heu_2)
 #solucionador.a_star(Heuristics.heu_3)
