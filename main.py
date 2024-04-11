@@ -1,5 +1,6 @@
 from solver import RubikSolver, Heuristics
 from text import Texts
+import time
 
 '''
 Rubik's cube python proyect
@@ -53,7 +54,10 @@ class Main:
 
         # Si el método no requiere heurística
         if metodo == 1:
+            inicio = time.time()
             self.solver.bfs()
+            fin = time.time()
+            Texts.t(fin - inicio)
 
         # Si el método requiere heurística
         elif metodo in [2, 3, 4]:
@@ -74,11 +78,20 @@ class Main:
             if heuristica in heuristic_functions:
                 heuristic_function = heuristic_functions[heuristica]
                 if metodo == 2:
+                    inicio = time.time()
                     self.solver.best_first_search(heuristic_function)
+                    fin = time.time()
+                    Texts.t(fin - inicio)
                 elif metodo == 3:
+                    inicio = time.time()
                     self.solver.a_star(heuristic_function)
+                    fin = time.time()
+                    Texts.t(fin - inicio)
                 elif metodo == 4:
+                    inicio = time.time()
                     self.solver.ida_star(heuristic_function)
+                    fin = time.time()
+                    Texts.t(fin - inicio)
     
 main = Main()
 

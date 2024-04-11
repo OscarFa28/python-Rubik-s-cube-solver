@@ -49,3 +49,5 @@ class Texts:
         ]
         for heuristica in heuristicas:
             print (heuristica)
+    def t(time):
+        print('Tiempo transcurrido: '+ str(time)+' segundos')
