@@ -17,14 +17,9 @@ class Heuristics:
         return val
     
     @staticmethod
-    #Otra heuristica chafa, que haga el conteo de caras correctas
+    #
     def heu_2(node):
-        val = 0
-        for i in range(6):
-            for j in range(8):
-                if node.Rubik.cubo[i][j] != i:
-                    val += 1
-        return val
+        pass
     
     @staticmethod
     #Esta cuenta cuantos bloques estan en la misma cara, son adjuntas y tienen el mismo color
@@ -70,8 +65,6 @@ class RubikSolver:
     def __init__(self):
         self.Rubik = RubikCube()
         self.solved = (0, 2396745, 4793490, 7190235, 9586980, 11983725)
-        self.mov_resuelto = []
-        self.iteraciones = 0
 
     def revolver(self, azar, movs):
         if azar is True:
@@ -91,7 +84,6 @@ class RubikSolver:
         visited.add(tuple(self.Rubik.caras))
         visited.add(self.solved)
         while cola.empty() is not True:
-            self.iteraciones += 1
             aux = cola.get()
             for i in range(12):
                 aux_c = copy.deepcopy(aux)
@@ -177,10 +169,10 @@ class RubikSolver:
                     return
 
 solucionador = RubikSolver()
-solucionador.revolver(True, 5)
+solucionador.revolver(True, 6)
 #solucionador.bfs()
-solucionador.best_first_search(Heuristics.heu_1)
-#solucionador.a_star(Heuristics.heu_2)
+#solucionador.best_first_search(Heuristics.heu_3)
+#solucionador.a_star(Heuristics.heu_3)
 
 """
 PRUEBA CORTA DE HEURISTICA 1
