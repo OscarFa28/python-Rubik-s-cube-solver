@@ -38,6 +38,13 @@ class Heuristics:
             if node.Rubik.cubo[i][l[7]] != node.Rubik.cubo[i][l[0]]:
                 val += 1
         return val
+    
+    @staticmethod
+    def heu_4(node):
+        val1 = Heuristics.heu_1(node)
+        val2 = Heuristics.heu_2(node)
+        val3 = Heuristics.heu_3(node)
+        return (val1 + val2 + val3) / 3
 
 class Nodo:
     def __init__(self, Rubik):
@@ -50,6 +57,9 @@ class Nodo:
     
     def calculate_heuristic(self, heuristic):
         self.heuristic_value = heuristic(self)
+        
+    def return_heuristic_value(self, heuristic):
+        return heuristic(self)
 
     def __eq__(self, other):
         if not isinstance(other, Nodo):
@@ -78,6 +88,10 @@ class RubikSolver:
             self.Rubik.shuffle_azar(movs)
         else:
             self.Rubik.shuffle(movs)
+        self.Rubik.print_faces()
+    
+    def make_move(self, move):
+        self.Rubik.movs(move)
         self.Rubik.print_faces()
 
     def bfs(self):
@@ -175,66 +189,54 @@ class RubikSolver:
                     print("Movimientos para resolver: ", curr2.distancia)
                     curr2.imp_mov()
                     return
-                
+    
     def ida_star(self, heuristic):
-        if tuple(self.Rubik.caras) == self.solved:
+        if(tuple(self.Rubik.caras) == self.solved):
             print("Already solved.")
             return
-
-        def search(node, g, bound, visited):
-            f = g + node.heuristic_value
-            if f > bound:
-                return f
-            if tuple(node.Rubik.caras) == self.solved:
-                print("---SOLVED---")
-                print("Movimientos para resolver: ", g)
-                node.imp_mov()
-                return -1  # Indicar que se ha encontrado la solución
-            
-            min_val = float('inf')
-            for i in range(12):
-                child = copy.deepcopy(node)
-                child.Rubik.movs(i)
-                lista = tuple(child.Rubik.caras)
-                if lista not in visited:
-                    visited.add(lista)
-                    self.iteraciones += 1
-                    result = search(child, g + 1, bound, visited)
-                    if result == -1:
-                        return -1
-                    if result < min_val:
-                        min_val = result
-            return min_val
-
-        bound = heuristic(self)
-        pq = PriorityQueue()
+        
         source = Nodo(self.Rubik)
-        pq.put(source)
-        visited = set()
-        visited.add(tuple(self.Rubik.caras))
-
+        threshold = source.return_heuristic_value(heuristic)
         while True:
-            result = search(pq.get(), 0, bound, visited)
-            if result == -1:
+            print(threshold)
+            temp = self.__search(source, 0, threshold, heuristic)
+            if temp == "FOUND":
                 return
-            if result == float('inf'):
-                print("Not possible")
-                return
-            bound = result
+            if temp == float('inf'):
+                return "Not possible"
+            threshold = temp
+            
+
+    def __search(self, node, g, threshold, heuristic):
+        f = g + node.return_heuristic_value(heuristic)
+        if f > threshold:
+            return f
+        if node == self.solved:
+            return "FOUND"
+        min = float('inf')
+        for i in range(12):
+            node2 = copy.deepcopy(node)
+            node2.Rubik.movs(i)
+            temp = self.__search(node2, g + 1, threshold, heuristic)
+            if temp == "FOUND":
+                return "FOUND"
+            if temp < min:
+                min = temp
+        return min
 
 
-
+    
                 
                 
     
     
 
-solucionador = RubikSolver()
-solucionador.revolver(True, 5)
+#solucionador = RubikSolver()
+#solucionador.revolver(True, 8)
 #solucionador.bfs()
-solucionador.best_first_search(Heuristics.heu_1)
-#solucionador.a_star(Heuristics.heu_2)
-solucionador.ida_star(Heuristics.heu_1)
+#solucionador.best_first_search(Heuristics.heu_4)
+#solucionador.a_star(Heuristics.heu_1)
+#solucionador.ida_star(Heuristics.heu_4)
 
 """
 PRUEBA CORTA DE HEURISTICA 1
