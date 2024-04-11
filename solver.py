@@ -175,12 +175,66 @@ class RubikSolver:
                     print("Movimientos para resolver: ", curr2.distancia)
                     curr2.imp_mov()
                     return
+                
+    def ida_star(self, heuristic):
+        if tuple(self.Rubik.caras) == self.solved:
+            print("Already solved.")
+            return
+
+        def search(node, g, bound, visited):
+            f = g + node.heuristic_value
+            if f > bound:
+                return f
+            if tuple(node.Rubik.caras) == self.solved:
+                print("---SOLVED---")
+                print("Movimientos para resolver: ", g)
+                node.imp_mov()
+                return -1  # Indicar que se ha encontrado la solución
+            
+            min_val = float('inf')
+            for i in range(12):
+                child = copy.deepcopy(node)
+                child.Rubik.movs(i)
+                lista = tuple(child.Rubik.caras)
+                if lista not in visited:
+                    visited.add(lista)
+                    self.iteraciones += 1
+                    result = search(child, g + 1, bound, visited)
+                    if result == -1:
+                        return -1
+                    if result < min_val:
+                        min_val = result
+            return min_val
+
+        bound = heuristic(self)
+        pq = PriorityQueue()
+        source = Nodo(self.Rubik)
+        pq.put(source)
+        visited = set()
+        visited.add(tuple(self.Rubik.caras))
+
+        while True:
+            result = search(pq.get(), 0, bound, visited)
+            if result == -1:
+                return
+            if result == float('inf'):
+                print("Not possible")
+                return
+            bound = result
+
+
+
+                
+                
+    
+    
 
 solucionador = RubikSolver()
 solucionador.revolver(True, 5)
 #solucionador.bfs()
 solucionador.best_first_search(Heuristics.heu_1)
 #solucionador.a_star(Heuristics.heu_2)
+solucionador.ida_star(Heuristics.heu_1)
 
 """
 PRUEBA CORTA DE HEURISTICA 1

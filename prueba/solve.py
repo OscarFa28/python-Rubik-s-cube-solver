@@ -38,7 +38,7 @@ fmt = '%H:%M:%S'
 inicio = time.strftime(fmt)
 
 print("Usando IDA: ")
-actual_shuffled = make_shuffle(actual, 4)
+actual_shuffled = make_shuffle(actual, 8)
 print_cube(actual_shuffled.cubo)
 ida(actual_shuffled)
 
