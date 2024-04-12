@@ -74,7 +74,12 @@ class Nodo:
         #Valor heuristico que se calcula a cada paso, y el total para usarlo en A*
         self.heuristic_value = 0
         self.total_heuristic = 0
-    
+        
+        #IDA
+        self.h = 0
+        self.g = 0
+        self.padre = None
+        self.movimiento = None
     #Funcion para calcular la heuristica del nodo en cada paso, con una heuristica pasada como parametro
     def calculate_heuristic(self, heuristic):
         self.heuristic_value = heuristic(self)
@@ -111,6 +116,10 @@ class RubikSolver:
     def __init__(self):
         self.Rubik = RubikCube()
         self.solved = (0, 2396745, 4793490, 7190235, 9586980, 11983725)
+        
+        #IDA
+        self.b = 0
+        self.nodos = 0
 
     #Función para revolver el cubo, azar es un booleano que nos dice si es al azar o no, y movs es la cantidad de movs al azar, o bien la lista de movimientos a hacer
     def revolver(self, azar, movs):
@@ -243,42 +252,87 @@ class RubikSolver:
                     return
     
     def ida_star(self, heuristic):
-        # Método IDA* para resolver el cubo de Rubik
-        # Comprueba si el cubo ya está resuelto
-        if tuple(self.Rubik.caras) == self.solved:
-            print("Already solved.")
-            return
+        # Se inicializa el nodo fuente con el estado inicial del problema
+        source = Nodo(self.Rubik)
         
-        source = Nodo(self.Rubik)  # Nodo de origen con el estado actual del cubo
-        threshold = source.return_heuristic_value(heuristic)  # Umbral inicial
+        # Se calcula la heurística del nodo fuente
+        source.h = source.return_heuristic_value(heuristic)
+        
+        # Se establece el límite inicial de costo igual a la heurística del nodo fuente
+        limite_costo = source.h
+        
+        # Lista que representa la frontera de búsqueda
+        frontera = list()
+
+        # Bucle principal de búsqueda
         while True:
-            print(threshold)  # Imprime el umbral actual (para propósitos de depuración)
-            # Realiza una búsqueda con IDA* hasta que encuentre una solución o alcance un umbral máximo
-            temp = self.__search(source, 0, threshold, heuristic)
-            if temp == "FOUND":  # Si se encuentra una solución, termina el algoritmo
-                return
-            if temp == float('inf'):  # Si no es posible resolver el cubo, devuelve un mensaje de error
-                return "Not possible"
-            threshold = temp  # Actualiza el umbral para la siguiente iteración
+            minimo = None
+            
+            # Se añade el nodo fuente a la frontera
+            frontera.append(source)
+            
+            # Bucle de expansión de nodos en la frontera
+            while len(frontera) != 0:
+                actual = frontera.pop()
+
+                # Se verifica si el estado actual es el estado objetivo
+                if self.objetivo_alcanzado(actual):
+                    print('Movimientos para resolver:', actual.g)
+                    return
+                
+                # Se generan los hijos del estado actual
+                for i in range(12):
+                    nuevo = Nodo(actual.Rubik)
+                    nuevo.g = actual.g + 1
+                    nuevo.padre = actual
+                    nuevo.movimiento = nuevo.Rubik.movs(i)
+                    nuevo.h = nuevo.return_heuristic_value(heuristic)
+                    
+                    # Se verifica si el costo estimado supera el límite de costo actual
+                    if nuevo.g + nuevo.h > limite_costo:
+                        # Se actualiza el valor mínimo si es necesario
+                        if minimo is None or nuevo.g + nuevo.h < minimo:
+                            minimo = nuevo.g + nuevo.h
+                        continue
+                    
+                    # Se verifica si el hijo ya está en la frontera o tiene un ancestro en la ruta actual
+                    if actual.padre is not None and (self.contiene_ancestro(nuevo, actual) or self.contiene_frontera(nuevo, frontera)):
+                        continue
+                    
+                    # Se añade el hijo a la frontera
+                    frontera.append(nuevo)
+                    
+                
+
+            # Se actualiza el límite de costo con el valor mínimo encontrado
+            limite_costo = minimo
+
+    def objetivo_alcanzado(self, actual):
+        # Se verifica si el estado actual es el estado objetivo (heurística igual a cero)
+        if actual.h != 0:
+            return False
+
+        print("encontrado")
         
-    def __search(self, node, g, threshold, heuristic):
-        # Método privado para realizar la búsqueda recursiva con IDA*
-        f = g + node.return_heuristic_value(heuristic)  # Costo total actual (g + heurística)
-        if f > threshold:  # Si el costo total supera el umbral, termina la búsqueda en este nodo
-            return f
-        if node == self.solved:  # Si se alcanza el estado objetivo, se encontró una solución
-            return "FOUND"
-        min = g + node.return_heuristic_value(heuristic)  # Inicializa el mínimo con el costo actual
-        for i in range(12):  # Itera sobre los posibles movimientos del cubo (12 en total)
-            node2 = copy.deepcopy(node)  # Crea una copia del nodo actual para simular el movimiento
-            node2.Rubik.movs(i)  # Aplica el movimiento al cubo
-            # Realiza una búsqueda recursiva con IDA* desde el nuevo nodo generado
-            temp = self.__search(node2, g + 1, threshold, heuristic)
-            if temp == "FOUND":  # Si se encuentra una solución, termina la búsqueda
-                return "FOUND"
-            if temp < min:  # Actualiza el mínimo si se encuentra un nuevo valor menor
-                min = temp
-        return min  # Retorna el mínimo encontrado después de explorar todos los movimientos
+        return True
+
+    # Función que verifica si un estado es ancestro de otro estado
+    def contiene_ancestro(self, hijo, padre):
+        actual = padre.padre
+        while actual is not None:
+            if actual.Rubik == hijo.Rubik:
+                return True
+            actual = actual.padre
+
+        return False
+
+    # Función que verifica si un estado está en la frontera
+    def contiene_frontera(self, hijo, frontera):
+        for actual in frontera:
+            if actual.Rubik == hijo.Rubik:
+                return True
+
+        return False
 
 
 solucionador = RubikSolver()
@@ -286,7 +340,7 @@ solucionador = RubikSolver()
 #solucionador.bfs()
 #solucionador.best_first_search(Heuristics.heu_2)
 #solucionador.a_star(Heuristics.heu_3)
-#solucionador.ida_star(Heuristics.heu_1)
+#solucionador.ida_star(Heuristics.heu_3)
 
 """
 LIST OF MOVES:
