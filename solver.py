@@ -338,11 +338,11 @@ class RubikSolver:
 
 
 solucionador = RubikSolver()
-solucionador.revolver(True, 3)
+#solucionador.revolver(True, 3)
 #solucionador.bfs()
 #solucionador.best_first_search(Heuristics.heu_2)
 #solucionador.a_star(Heuristics.heu_3)
-solucionador.ida_star(Heuristics.heu_1)
+#solucionador.ida_star(Heuristics.heu_1)
 
 """
 LIST OF MOVES:

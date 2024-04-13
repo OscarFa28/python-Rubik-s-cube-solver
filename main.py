@@ -93,8 +93,6 @@ class Main:
                 elif metodo == 4:
                     inicio = time.time()
                     self.solver.ida_star(heuristic_function)  # Resuelve el cubo utilizando IDA*
-                    fin = time.time()
-                    Texts.t(fin - inicio)
     
 main = Main()  # Crea una instancia de la clase Main
 
