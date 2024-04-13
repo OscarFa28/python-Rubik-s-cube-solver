@@ -108,43 +108,57 @@ class RubikCube:
         for i in movimientos:
             self.movs(i)
         
+    
     def movs(self, mov):
-        if mov==0:
+        if mov == 0:
             self.R1()
             self.calcular_caras(2)
-        elif mov==1:
+            return "R1"
+        elif mov == 1:
             self.R2()
             self.calcular_caras(2)
-        elif mov==2:
+            return "R2"
+        elif mov == 2:
             self.L1()
             self.calcular_caras(2)
-        elif mov==3:
+            return "L1"
+        elif mov == 3:
             self.L2()
             self.calcular_caras(2)
-        elif mov==4:
+            return "L2"
+        elif mov == 4:
             self.U1()
             self.calcular_caras(1)
-        elif mov==5:
+            return "U1"
+        elif mov == 5:
             self.U2()
             self.calcular_caras(1)
-        elif mov==6:
+            return "U2"
+        elif mov == 6:
             self.D1()
             self.calcular_caras(1)
-        elif mov==7:
+            return "D1"
+        elif mov == 7:
             self.D2()
             self.calcular_caras(1)
-        elif mov==8:
+            return "D2"
+        elif mov == 8:
             self.F1()
             self.calcular_caras(0)
-        elif mov==9:
+            return "F1"
+        elif mov == 9:
             self.F2()
             self.calcular_caras(0)
-        elif mov==10:
+            return "F2"
+        elif mov == 10:
             self.B1()
             self.calcular_caras(0)
+            return "B1"
         else:
             self.B2()
             self.calcular_caras(0)
+            return "B2"
+
 
     def print_faces(self):
         for j in range(2):

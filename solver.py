@@ -79,14 +79,14 @@ class Nodo:
         self.h = 0
         self.g = 0
         self.padre = None
-        self.movimiento = None
+        self.movimientos = []
     #Funcion para calcular la heuristica del nodo en cada paso, con una heuristica pasada como parametro
     def calculate_heuristic(self, heuristic):
         self.heuristic_value = heuristic(self)
     
     #Funcion para devolver el valor heuristico, usado en IDA
     def return_heuristic_value(self, heuristic):
-        return heuristic(self)
+        self.h = heuristic(self)
 
     #Definimos el operador == para comparar dos nodos y saber si son iguales
     def __eq__(self, other):
@@ -120,7 +120,6 @@ class RubikSolver:
         #IDA
         self.b = 0
         self.nodos = 0
-
     #Función para revolver el cubo, azar es un booleano que nos dice si es al azar o no, y movs es la cantidad de movs al azar, o bien la lista de movimientos a hacer
     def revolver(self, azar, movs):
         #Si se hace al azar, llamamos shuffle_azar, que aplica la cantidad llamada de movimientos aleatorios
@@ -256,16 +255,16 @@ class RubikSolver:
         source = Nodo(self.Rubik)
         
         # Se calcula la heurística del nodo fuente
-        source.h = source.return_heuristic_value(heuristic)
-        
+        source.return_heuristic_value(heuristic)
         # Se establece el límite inicial de costo igual a la heurística del nodo fuente
         limite_costo = source.h
         
         # Lista que representa la frontera de búsqueda
         frontera = list()
-
+        
         # Bucle principal de búsqueda
         while True:
+            
             minimo = None
             
             # Se añade el nodo fuente a la frontera
@@ -273,20 +272,23 @@ class RubikSolver:
             
             # Bucle de expansión de nodos en la frontera
             while len(frontera) != 0:
+                
                 actual = frontera.pop()
 
                 # Se verifica si el estado actual es el estado objetivo
                 if self.objetivo_alcanzado(actual):
                     print('Movimientos para resolver:', actual.g)
+                    print(actual.movimientos)
                     return
                 
                 # Se generan los hijos del estado actual
                 for i in range(12):
-                    nuevo = Nodo(actual.Rubik)
+                    nuevo = copy.deepcopy(actual)
                     nuevo.g = actual.g + 1
                     nuevo.padre = actual
-                    nuevo.movimiento = nuevo.Rubik.movs(i)
-                    nuevo.h = nuevo.return_heuristic_value(heuristic)
+                    nuevo.movimientos.append(nuevo.Rubik.movs(i))
+                    nuevo.return_heuristic_value(heuristic)
+                    
                     
                     # Se verifica si el costo estimado supera el límite de costo actual
                     if nuevo.g + nuevo.h > limite_costo:
@@ -303,16 +305,17 @@ class RubikSolver:
                     frontera.append(nuevo)
                     
                 
-
+                
             # Se actualiza el límite de costo con el valor mínimo encontrado
             limite_costo = minimo
+            
 
     def objetivo_alcanzado(self, actual):
         # Se verifica si el estado actual es el estado objetivo (heurística igual a cero)
         if actual.h != 0:
             return False
 
-        print("encontrado")
+        print("---SOLVED---")
         
         return True
 
@@ -320,27 +323,26 @@ class RubikSolver:
     def contiene_ancestro(self, hijo, padre):
         actual = padre.padre
         while actual is not None:
-            if actual.Rubik == hijo.Rubik:
+            if tuple(actual.Rubik.caras) == tuple(hijo.Rubik.caras):
                 return True
             actual = actual.padre
-
         return False
 
     # Función que verifica si un estado está en la frontera
     def contiene_frontera(self, hijo, frontera):
         for actual in frontera:
-            if actual.Rubik == hijo.Rubik:
+            if tuple(actual.Rubik.caras) == tuple(hijo.Rubik.caras):
                 return True
-
         return False
+    
 
 
 solucionador = RubikSolver()
-#solucionador.revolver(True, 2)
+solucionador.revolver(True, 3)
 #solucionador.bfs()
 #solucionador.best_first_search(Heuristics.heu_2)
 #solucionador.a_star(Heuristics.heu_3)
-#solucionador.ida_star(Heuristics.heu_3)
+solucionador.ida_star(Heuristics.heu_1)
 
 """
 LIST OF MOVES:

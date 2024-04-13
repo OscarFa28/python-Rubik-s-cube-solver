@@ -79,12 +79,15 @@ def ida(start):
     nodos = 0
     frontera = list()
     factores_de_rama = list()
-
+    ar=1
     while True:
+        print("arbol: "+str(ar))
         minimo = None
         frontera.append(start)
-
+        f = 1
         while len(frontera) != 0:
+            
+            print("frontera: "+str(f))
             actual = frontera.pop()
 
             if objetivo_alcanzado(actual):
@@ -104,6 +107,7 @@ def ida(start):
                 #movimientos.append(make_movement(nuevo.cubo, i + 1, 0))
                 
                 nuevo.h = suma_max_esquinas_borde(nuevo.cubo)
+                print("heu: "+str(i)+"="+str(nuevo.h))
 
                 if nuevo.g + nuevo.h > limite_costo:
                     if minimo is None or nuevo.g + nuevo.h < minimo:
@@ -115,8 +119,10 @@ def ida(start):
                 b += 1
             if b != 0:
                 factores_de_rama.append(b)
+            f +=1
 
         limite_costo = minimo
+        ar += 1
         
 # Función para calcular la distancia de Manhattan
 def distancia_manhattan(cubo, i, z, esquina):
